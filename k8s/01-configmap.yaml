@@ -1,0 +1,15 @@
+# TODO 10: Kubernetes - ConfigMap for application configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: syos-monitoring
+data:
+  DB_HOST: "postgres-service"
+  DB_PORT: "5432"
+  DB_NAME: "sensor_monitoring"
+  RABBITMQ_HOST: "rabbitmq-service"
+  RABBITMQ_PORT: "5672"
+  LOG_LEVEL: "info"
+  NODE_ENV: "production"
+  COLLECTION_INTERVAL: "10000"

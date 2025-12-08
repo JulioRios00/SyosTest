@@ -1,0 +1,130 @@
+# TODO 9: Docker infrastructure - Docker Compose configuration
+# Complete docker-compose setup for all services
+
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: syos-postgres
+    environment:
+      POSTGRES_DB: sensor_monitoring
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - syos-network
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: syos-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin123
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - syos-network
+
+  api-principal:
+    build:
+      context: ./api-principal
+      dockerfile: Dockerfile
+    container_name: syos-api-principal
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: sensor_monitoring
+      DB_USER: postgres
+      DB_PASSWORD: postgres123
+      RABBITMQ_URL: amqp://admin:admin123@rabbitmq:5672
+      LOG_LEVEL: info
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - syos-network
+
+  sensor-service:
+    build:
+      context: ./sensor-service
+      dockerfile: Dockerfile
+    container_name: syos-sensor-service
+    environment:
+      NODE_ENV: production
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: sensor_monitoring
+      DB_USER: postgres
+      DB_PASSWORD: postgres123
+      RABBITMQ_URL: amqp://admin:admin123@rabbitmq:5672
+      COLLECTION_INTERVAL: 10000
+      LOG_LEVEL: info
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      api-principal:
+        condition: service_started
+    restart: unless-stopped
+    networks:
+      - syos-network
+
+  notification-service:
+    build:
+      context: ./notification-service
+      dockerfile: Dockerfile
+    container_name: syos-notification-service
+    environment:
+      NODE_ENV: production
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: sensor_monitoring
+      DB_USER: postgres
+      DB_PASSWORD: postgres123
+      RABBITMQ_URL: amqp://admin:admin123@rabbitmq:5672
+      LOG_LEVEL: info
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      api-principal:
+        condition: service_started
+    restart: unless-stopped
+    networks:
+      - syos-network
+
+volumes:
+  postgres_data:
+    driver: local
+  rabbitmq_data:
+    driver: local
+
+networks:
+  syos-network:
+    driver: bridge
