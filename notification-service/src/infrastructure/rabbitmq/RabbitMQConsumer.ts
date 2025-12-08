@@ -25,7 +25,6 @@ export class RabbitMQConsumer implements IMessageQueue {
       // Set prefetch to 1 to ensure fair distribution
       this.channel.prefetch(1);
 
-      console.log('Connected to RabbitMQ (Consumer)');
     } catch (error) {
       console.error('Failed to connect to RabbitMQ:', error);
       throw error;
@@ -40,7 +39,6 @@ export class RabbitMQConsumer implements IMessageQueue {
       if (this.connection) {
         await this.connection.close();
       }
-      console.log('Disconnected from RabbitMQ (Consumer)');
     } catch (error) {
       console.error('Error disconnecting from RabbitMQ:', error);
       throw error;
@@ -78,7 +76,6 @@ export class RabbitMQConsumer implements IMessageQueue {
         { noAck: false }
       );
 
-      console.log(`Consuming messages from queue: ${queue}`);
     } catch (error) {
       console.error('Failed to consume messages from RabbitMQ:', error);
       throw error;

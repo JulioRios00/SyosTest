@@ -23,7 +23,6 @@ export class RabbitMQProducer implements IMessageQueue {
         durable: true,
       });
 
-      console.log('Connected to RabbitMQ (Producer)');
     } catch (error) {
       console.error('Failed to connect to RabbitMQ:', error);
       throw error;
@@ -38,7 +37,6 @@ export class RabbitMQProducer implements IMessageQueue {
       if (this.connection) {
         await this.connection.close();
       }
-      console.log('Disconnected from RabbitMQ (Producer)');
     } catch (error) {
       console.error('Error disconnecting from RabbitMQ:', error);
       throw error;

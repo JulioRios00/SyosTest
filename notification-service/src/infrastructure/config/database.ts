@@ -36,7 +36,6 @@ export class DatabaseConnection {
       const client = await pool.connect();
       await client.query('SELECT NOW()');
       client.release();
-      console.log('Database connection established successfully');
     } catch (error) {
       console.error('Failed to connect to database:', error);
       throw error;
@@ -85,6 +84,5 @@ export class DatabaseConnection {
       CREATE INDEX IF NOT EXISTS idx_alerts_created_at ON alerts(created_at DESC);
     `);
 
-    console.log('Database tables created successfully');
   }
 }

@@ -1,220 +1,145 @@
-# 🌡️ SYOS - Sensor Monitoring System
+# SYOS - Sensor Monitoring System
 
-[![Node.js](https://img.shields.io/badge/Node.js-20.x-green.svg)](https://nodejs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue.svg)](https://www.typescriptlang.org/)
-[![Docker](https://img.shields.io/badge/Docker-24.x-blue.svg)](https://www.docker.com/)
-[![Kubernetes](https://img.shields.io/badge/Kubernetes-1.28+-blue.svg)](https://kubernetes.io/)
+Real-time temperature and humidity monitoring system with microservices architecture.
 
-A distributed microservices application for real-time temperature and humidity monitoring using **Hexagonal Architecture**, built with Node.js, Express, RabbitMQ, PostgreSQL, and deployed with Docker & Kubernetes.
+## Quick Start
 
-## 📋 Table of Contents
-
-- [Overview](#overview)
-- [Architecture](#architecture)
-- [Technologies](#technologies)
-- [Prerequisites](#prerequisites)
-- [Local Development Setup](#local-development-setup)
-- [Docker Deployment](#docker-deployment)
-- [Kubernetes Deployment](#kubernetes-deployment)
-- [API Documentation](#api-documentation)
-- [Testing](#testing)
-- [Project Structure](#project-structure)
-- [Troubleshooting](#troubleshooting)
-
-## 🎯 Overview
-
-This system monitors temperature and humidity from multiple sensors in real-time, generating alerts when readings exceed configured limits. The application demonstrates:
-
-- **Microservices Architecture** with 3 independent services
-- **Hexagonal Architecture** (Ports & Adapters pattern)
-- **Asynchronous Communication** via RabbitMQ
-- **Event-Driven Design** with message queues
-- **Domain-Driven Design** principles
-- **IIFE Pattern** for sensor and notification services
-- **Docker Containerization** with non-root users
-- **Kubernetes Orchestration** with high availability
-
-### Microservices
-
-1. **API Principal**: REST API and Dashboard (Express + DustJS)
-2. **Sensor Service**: Simulates data collection (IIFE pattern)
-3. **Notification Service**: Processes alerts (IIFE pattern)
-
-## 🏗️ Architecture
-
-### Hexagonal Architecture
-
-The project follows Hexagonal Architecture (Ports & Adapters) to separate business logic from infrastructure concerns:
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                    ADAPTERS LAYER                        │
-│  (HTTP Controllers, RabbitMQ Consumers, Schedulers)      │
-└────────────────┬────────────────────────┬────────────────┘
-                 │                        │
-┌────────────────▼────────────────────────▼────────────────┐
-│                  APPLICATION LAYER                        │
-│            (Use Cases, DTOs, Orchestration)               │
-└────────────────┬────────────────────────┬────────────────┘
-                 │                        │
-┌────────────────▼────────────────────────▼────────────────┐
-│                    DOMAIN LAYER                           │
-│  (Entities, Value Objects, Business Rules, Ports)         │
-└───────────────────────────────────────────────────────────┘
-                 ▲                        ▲
-                 │                        │
-┌────────────────┴────────────────────────┴────────────────┐
-│                INFRASTRUCTURE LAYER                       │
-│     (Database, RabbitMQ, Logger Implementations)          │
-└───────────────────────────────────────────────────────────┘
+**Run everything with one command:**
+```bash
+./start.sh
 ```
 
-### System Architecture
+Then open **http://localhost:3000/dashboard**
 
-```
-┌──────────────┐         ┌──────────────┐         ┌──────────────┐
-│              │         │              │         │              │
-│ API Principal│◄────────┤  PostgreSQL  ├────────►│   Sensor     │
-│   (Express)  │         │  (Database)  │         │   Service    │
-│              │         │              │         │   (IIFE)     │
-└──────┬───────┘         └──────────────┘         └──────┬───────┘
-       │                                                  │
-       │                 ┌──────────────┐                │
-       │                 │              │                │
-       └────────────────►│  RabbitMQ    │◄───────────────┘
-                         │  (Message    │
-                         │   Queue)     │
-                         └──────┬───────┘
-                                │
-                         ┌──────▼───────┐
-                         │              │
-                         │ Notification │
-                         │   Service    │
-                         │   (IIFE)     │
-                         └──────────────┘
+**Stop all services:**
+```bash
+./stop.sh
 ```
 
-## 🛠️ Technologies
+## What This System Does
 
-### Core Technologies
-- **Node.js** (v20+) - Runtime environment
-- **TypeScript** (v5.3+) - Type-safe development
-- **Express** (v4.18) - Web framework
-- **DustJS** (v2.7) - Template engine for dashboard
-- **TinyBone** - Client-side dual rendering framework (in shared/tinybone)
-- **node-postgres (pg)** - PostgreSQL database driver
+Monitors temperature and humidity from multiple sensors and generates alerts when readings exceed configured limits.
 
-### Infrastructure
-- **PostgreSQL** (v16) - Relational database
-- **RabbitMQ** (v3) - Message broker
-- **Docker** (v24+) - Containerization
-- **Kubernetes** (v1.28+) - Container orchestration
+**Key Features:**
+- REST API for sensor management
+- Real-time dashboard with statistics
+- Automated alert generation
+- Message queue communication
+- Containerized deployment
 
-### Libraries
-- **amqplib** - RabbitMQ client
-- **Winston** - Structured logging
-- **pg** - PostgreSQL driver
+## System Components
 
-## 📦 Prerequisites
+**3 Microservices:**
+1. **API Principal** - REST API and web dashboard (port 3000)
+2. **Sensor Service** - Simulates data collection every 10 seconds
+3. **Notification Service** - Processes and stores alerts
 
-### For Local Development
-- Node.js 20.x or higher
-- PostgreSQL 16.x
-- RabbitMQ 3.x
-- npm or yarn
+**Infrastructure:**
+- PostgreSQL database (sensors and alerts)
+- RabbitMQ message broker (async communication)
+- Docker containers (all services)
+- Kubernetes manifests (production deployment)
 
-### For Docker Deployment
-- Docker 24.x or higher
-- Docker Compose 2.x or higher
+## Architecture
 
-### For Kubernetes Deployment
-- kubectl configured
-- Kubernetes cluster (minikube, k3s, or cloud provider)
-- Docker for building images
+**Clean Architecture (Hexagonal Pattern):**
+- Domain Layer: Business entities and rules
+- Application Layer: Use cases and orchestration
+- Infrastructure Layer: Database, message queue, logging
+- Adapters Layer: HTTP controllers, consumers, schedulers
 
-## 🚀 Local Development Setup
+**Service Communication:**
+```
+Browser → API Principal → PostgreSQL
+              ↓
+          RabbitMQ → Sensor Service
+              ↓
+    Notification Service
+```
 
-### 1. Clone the Repository
+## Technologies
+
+**Backend:**
+- Node.js 20.x with TypeScript
+- Express (REST API)
+- PostgreSQL (database)
+- RabbitMQ (message broker)
+
+**Frontend:**
+- TinyBone (client-side framework)
+- DustJS (templates)
+- RequireJS (module loading)
+
+**DevOps:**
+- Docker & Docker Compose
+- Kubernetes manifests
+- Jest (100+ tests)
+
+## Prerequisites
+
+**Minimal Setup (using start.sh):**
+- Docker
+- Node.js 20+
+
+**Manual Setup:**
+- Docker
+- Node.js 20+
+- PostgreSQL 16
+- RabbitMQ 3
+
+## Getting Started
+
+### Option 1: Automated Setup (Recommended)
 
 ```bash
-git clone <repository-url>
-cd Syos
+# Start everything
+./start.sh
+
+# Access the dashboard
+open http://localhost:3000/dashboard
+
+# Stop everything
+./stop.sh
 ```
 
-### 2. Install Dependencies
+**What start.sh does:**
+- Starts PostgreSQL (Docker)
+- Creates database tables
+- Inserts sample data (5 sensors)
+- Starts RabbitMQ (Docker)
+- Installs npm dependencies
+- Starts API on port 3000
 
+### Option 2: Manual Setup
+
+**1. Install dependencies:**
 ```bash
-# Install dependencies for all services
 cd api-principal && npm install && cd ..
-cd sensor-service && npm install && cd ..
-cd notification-service && npm install && cd ..
 ```
 
-### 3. Setup PostgreSQL
-
+**2. Start infrastructure:**
 ```bash
-# Create database
-createdb sensor_monitoring
+docker run -d --name syos-postgres \
+  -e POSTGRES_PASSWORD=syos123 \
+  -e POSTGRES_DB=syos \
+  -p 5432:5432 postgres:16
 
-# Or using psql
-psql -U postgres
-CREATE DATABASE sensor_monitoring;
-\q
-```
-
-### 4. Setup RabbitMQ
-
-```bash
-# Using Docker
-docker run -d --name rabbitmq \
-  -p 5672:5672 \
-  -p 15672:15672 \
+docker run -d --name syos-rabbitmq \
   -e RABBITMQ_DEFAULT_USER=admin \
   -e RABBITMQ_DEFAULT_PASS=admin123 \
-  rabbitmq:3-management-alpine
+  -p 5672:5672 -p 15672:15672 \
+  rabbitmq:3-management
 ```
 
-### 5. Configure Environment Variables
-
+**3. Start API:**
 ```bash
-# Copy example env files
-cp api-principal/.env.example api-principal/.env
-cp sensor-service/.env.example sensor-service/.env
-cp notification-service/.env.example notification-service/.env
-
-# Edit .env files with your configuration
-```
-
-### 6. Build TypeScript
-
-```bash
-# Build all services
-cd api-principal && npm run build && cd ..
-cd sensor-service && npm run build && cd ..
-cd notification-service && npm run build && cd ..
-```
-
-### 7. Start Services
-
-```bash
-# Terminal 1 - API Principal
 cd api-principal
 npm run dev
-
-# Terminal 2 - Sensor Service
-cd sensor-service
-npm run dev
-
-# Terminal 3 - Notification Service
-cd notification-service
-npm run dev
 ```
 
-### 8. Access the Application
-
-- **Dashboard**: http://localhost:3000/dashboard
-- **API**: http://localhost:3000/api
-- **RabbitMQ Management**: http://localhost:15672 (admin/admin123)
+**4. Access:**
+- Dashboard: http://localhost:3000/dashboard
+- RabbitMQ UI: http://localhost:15672 (admin/admin123)
 
 ## 🐳 Docker Deployment
 
@@ -246,67 +171,23 @@ docker-compose ps
 
 # Test API health
 curl http://localhost:3000/health
+## Docker Deployment
+
+**Start all services:**
+```bash
+docker-compose up -d
 ```
 
-### 4. Create Test Sensors
-
+**Check status:**
 ```bash
-# Register a sensor
-curl -X POST http://localhost:3000/api/sensors \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Server Room Sensor",
-    "location": "Data Center - Room A",
-    "minTemperature": 18,
-    "maxTemperature": 24,
-    "minHumidity": 40,
-    "maxHumidity": 60
-  }'
+docker-compose ps
+docker-compose logs -f api-principal
 ```
 
-### 5. Access Dashboard
-
-Open http://localhost:3000/dashboard in your browser.
-
-### 6. Stop Services
-
+**Stop services:**
 ```bash
-# Stop all services
 docker-compose down
-
-# Stop and remove volumes
-docker-compose down -v
-```
-
-## ☸️ Kubernetes Deployment
-
-### 1. Build Docker Images
-
-```bash
-# Build images for Kubernetes
-docker build -t syos-api-principal:latest ./api-principal
-docker build -t syos-sensor-service:latest ./sensor-service
-docker build -t syos-notification-service:latest ./notification-service
-```
-
-### 2. Load Images (For local Kubernetes)
-
-```bash
-# For minikube
-minikube image load syos-api-principal:latest
-minikube image load syos-sensor-service:latest
-minikube image load syos-notification-service:latest
-
-# For kind
-kind load docker-image syos-api-principal:latest
-kind load docker-image syos-sensor-service:latest
-kind load docker-image syos-notification-service:latest
-```
-
-### 3. Deploy to Kubernetes
-
-```bash
-# Apply all manifests in order
+```pply all manifests in order
 kubectl apply -f k8s/00-namespace.yaml
 kubectl apply -f k8s/01-configmap.yaml
 kubectl apply -f k8s/02-secrets.yaml
@@ -322,93 +203,38 @@ kubectl apply -f k8s/05-api-principal.yaml
 kubectl apply -f k8s/06-sensor-service.yaml
 kubectl apply -f k8s/07-notification-service.yaml
 kubectl apply -f k8s/08-ingress.yaml
+## Kubernetes Deployment
+
+**Build images:**
+```bash
+docker build -t syos-api-principal:latest ./api-principal
+docker build -t syos-sensor-service:latest ./sensor-service
+docker build -t syos-notification-service:latest ./notification-service
 ```
 
-### 4. Verify Deployment
-
+**Deploy (minikube):**
 ```bash
-# Check all pods
-kubectl get pods -n syos-monitoring
+# Load images
+minikube image load syos-api-principal:latest
+minikube image load syos-sensor-service:latest
+minikube image load syos-notification-service:latest
 
-# Check services
-kubectl get services -n syos-monitoring
+# Deploy all manifests
+cd k8s && ./deploy.sh
 
-# View logs
-kubectl logs -f deployment/api-principal -n syos-monitoring
-kubectl logs -f deployment/sensor-service -n syos-monitoring
-kubectl logs -f deployment/notification-service -n syos-monitoring
-```
-
-### 5. Access the Application
-
-```bash
-# Get service URL (minikube)
+# Access service
 minikube service api-principal-service -n syos-monitoring
-
-# Or port-forward
-kubectl port-forward service/api-principal-service 3000:80 -n syos-monitoring
 ```
 
-### 6. Scale Services
-
+**Scale services:**
 ```bash
-# Scale notification service to 5 replicas
-kubectl scale deployment/notification-service --replicas=5 -n syos-monitoring
-
-# Scale sensor service to 3 replicas
 kubectl scale deployment/sensor-service --replicas=3 -n syos-monitoring
 ```
 
-### 7. Cleanup
-
+**Cleanup:**
 ```bash
-# Delete all resources
 kubectl delete namespace syos-monitoring
 ```
-
-## 📡 API Documentation
-
-### Base URL
-```
-http://localhost:3000
-```
-
-### Endpoints
-
-#### 1. Health Check
-```http
-GET /health
-```
-
-**Response:**
-```json
-{
-  "status": "healthy",
-  "service": "api-principal"
-}
-```
-
-#### 2. Register Sensor
-```http
-POST /api/sensors
-Content-Type: application/json
-```
-
-**Request Body:**
-```json
-{
-  "name": "Office Sensor",
-  "location": "Building A - Floor 3",
-  "minTemperature": 18,
-  "maxTemperature": 26,
-  "minHumidity": 30,
-  "maxHumidity": 70
-}
-```
-
-**Response:**
-```json
-{
   "success": true,
   "data": {
     "id": "uuid",
@@ -424,7 +250,6 @@ Content-Type: application/json
     "createdAt": "2025-12-07T...",
     "updatedAt": "2025-12-07T..."
   }
-}
 ```
 
 #### 3. Get All Sensors
@@ -447,129 +272,43 @@ GET /api/sensors/active
 
 #### 5. Dashboard View
 ```http
-GET /dashboard
-```
-Returns HTML dashboard with DustJS template.
+## API Endpoints
 
-#### 6. Dashboard Data (JSON)
-```http
-GET /api/dashboard
-```
+**Base URL:** `http://localhost:3000`
 
-**Response:**
-```json
-{
-  "success": true,
-  "data": {
-    "sensors": [...],
-    "recentAlerts": [...],
-    "statistics": {
-      "totalSensors": 5,
-      "activeSensors": 4,
-      "totalAlerts": 12
-    }
-  }
-}
-```
-
-## 🧪 Testing
-
-Comprehensive test suite with 100+ tests covering all layers of the hexagonal architecture.
-
-### Run Tests
-
+### Register Sensor
 ```bash
-# Run tests for all services
-cd api-principal && npm test
-cd sensor-service && npm test
-cd notification-service && npm test
+POST /api/sensors
 
-# Run with coverage
-npm run test:coverage
-
-# Run in watch mode
-npm run test:watch
+# Example
+curl -X POST http://localhost:3000/api/sensors \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Office Sensor",
+    "location": "Building A",
+    "minTemperature": 18,
+    "maxTemperature": 26,
+    "minHumidity": 30,
+    "maxHumidity": 70
+  }'
 ```
 
-### Test Coverage
-
-- **Domain Layer**: Entity and Value Object tests (51 tests)
-- **Application Layer**: Use Case tests with mocks (37 tests)
-- **Adapter Layer**: Controller and integration tests (12 tests)
-- **Total**: 100 tests across all services
-
-### Test Structure
-
-```
-tests/
-├── domain/
-│   ├── entities/          # Entity business logic tests
-│   └── value-objects/     # Value object validation tests
-├── application/
-│   └── use-cases/         # Use case orchestration tests
-└── adapters/
-    └── http/              # Controller and route tests
+### Get All Sensors
+```bash
+GET /api/sensors
+GET /api/sensors/active
 ```
 
-See the complete [Testing Documentation](./TESTING.md) for detailed test information.
-
-## 📁 Project Structure
-
+### Dashboard Data
+```bash
+GET /api/dashboard    # JSON response
+GET /dashboard        # HTML view
 ```
-Syos/
-├── api-principal/                 # API and Dashboard Service
-│   ├── src/
-│   │   ├── domain/               # Business logic
-│   │   │   ├── entities/         # Sensor, Alert entities
-│   │   │   ├── value-objects/    # Temperature, Humidity, SensorLimits
-│   │   │   └── ports/            # Interfaces (ISensorRepository, ILogger)
-│   │   ├── application/          # Use cases
-│   │   │   ├── use-cases/        # RegisterSensor, GetSensors, GetDashboardData
-│   │   │   └── dtos/             # Data Transfer Objects
-│   │   ├── infrastructure/       # External implementations
-│   │   │   ├── database/         # TinyBone repositories
-│   │   │   └── config/           # Database, RabbitMQ, Logger config
-│   │   ├── adapters/             # External interfaces
-│   │   │   ├── http/             # Controllers, routes
-│   │   │   └── views/            # DustJS templates
-│   │   └── index.ts              # Main entry point
-│   ├── Dockerfile
-│   ├── package.json
-│   └── tsconfig.json
-│
-├── sensor-service/                # Data Collection Service (IIFE)
-│   ├── src/
-│   │   ├── domain/
-│   │   ├── application/
-│   │   │   └── use-cases/        # CollectSensorDataUseCase
-│   │   ├── infrastructure/
-│   │   │   ├── database/
-│   │   │   └── rabbitmq/         # RabbitMQ Producer
-│   │   └── index.ts              # IIFE main
-│   ├── Dockerfile
-│   └── package.json
-│
-├── notification-service/          # Alert Processing Service (IIFE)
-│   ├── src/
-│   │   ├── domain/
-│   │   ├── application/
-│   │   │   └── use-cases/        # ProcessAlertUseCase
-│   │   ├── infrastructure/
-│   │   │   ├── database/
-│   │   │   └── rabbitmq/         # RabbitMQ Consumer
-│   │   └── index.ts              # IIFE main
-│   ├── Dockerfile
-│   └── package.json
-│
-├── k8s/                           # Kubernetes manifests
-│   ├── 00-namespace.yaml
-│   ├── 01-configmap.yaml
-│   ├── 02-secrets.yaml
-│   ├── 03-postgres.yaml
-│   ├── 04-rabbitmq.yaml
-│   ├── 05-api-principal.yaml
-│   ├── 06-sensor-service.yaml
-│   ├── 07-notification-service.yaml
+
+### Health Check
+```bash
+GET /health
+``` ├── 07-notification-service.yaml
 │   └── 08-ingress.yaml
 │
 ├── docker-compose.yml             # Docker Compose configuration
@@ -639,46 +378,15 @@ kubectl get pvc -n syos-monitoring
 
 ### Application Issues
 
-**Problem**: No alerts being generated
+## Testing
+
+**Run tests:**
 ```bash
-# Check if sensors are registered
-curl http://localhost:3000/api/sensors
-
-# Check sensor service logs
-docker-compose logs sensor-service
-
-# Check notification service logs
-docker-compose logs notification-service
+cd api-principal && npm test
+npm run test:coverage
 ```
 
-**Problem**: Dashboard not loading
-```bash
-# Check API Principal logs
-docker-compose logs api-principal
-
-# Verify database tables exist
-docker-compose exec postgres psql -U postgres -d sensor_monitoring -c "\dt"
-```
-
-## 🧪 Testing
-
-### Manual Testing
-
-```bash
-# 1. Register a sensor
-curl -X POST http://localhost:3000/api/sensors \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Test Sensor",
-    "location": "Test Lab",
-    "minTemperature": 20,
-    "maxTemperature": 25,
-    "minHumidity": 40,
-    "maxHumidity": 60
-  }'
-
-# 2. Wait for sensor service to collect data (10 seconds)
-
+**Test coverage:** 100+ tests across domain, application, and adapter layers.
 # 3. Check dashboard
 open http://localhost:3000/dashboard
 
@@ -710,3 +418,68 @@ Developed using AI assistance (GitHub Copilot with Claude Sonnet 4.5)
 ---
 
 **Note**: This is a technical test demonstrating microservices architecture, hexagonal architecture, and DevOps practices with Docker and Kubernetes.
+## Project Structure
+
+```
+├── start.sh / stop.sh           # Quick start/stop scripts
+├── docker-compose.yml           # Multi-container setup
+│
+├── api-principal/               # Main API service
+│   ├── src/
+│   │   ├── domain/             # Entities, value objects
+│   │   ├── application/        # Use cases
+│   │   ├── infrastructure/     # Database, config
+│   │   └── adapters/           # HTTP controllers
+│   ├── public/                 # Frontend assets
+│   └── tests/                  # 100+ tests
+│
+├── sensor-service/             # Data collection (IIFE)
+├── notification-service/       # Alert processing (IIFE)
+│
+├── k8s/                        # Kubernetes manifests
+└── shared/tinybone/            # Client-side framework
+```## Troubleshooting
+
+**Dashboard not loading?**
+```bash
+# Check API logs
+tail -f /tmp/syos-api.log
+
+# Verify database
+docker exec syos-postgres psql -U postgres -d syos -c "\dt"
+```
+
+**Containers not starting?**
+```bash
+docker-compose logs
+docker-compose ps
+```
+
+**Port already in use?**
+```bash
+# Stop existing services
+./stop.sh
+
+# Check what's using port 3000
+lsof -i :3000
+```
+
+## Key Features Demonstrated
+
+- Clean Architecture (Hexagonal pattern)
+- Microservices with message queue
+- Event-driven design
+- Docker containerization
+- Kubernetes orchestration
+- TypeScript with strict typing
+- Comprehensive test coverage
+
+## License
+
+Technical test project for SYOS.
+
+---
+
+**For more details, see:**
+- [ARCHITECTURE.md](./ARCHITECTURE.md) - Detailed architecture documentation
+- [API Principal README](./api-principal/README.md) - Service-specific documentation
