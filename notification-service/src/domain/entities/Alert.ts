@@ -1,5 +1,3 @@
-// TODO 2: Domain Layer - Entities
-// Alert Entity with business logic
 
 export enum AlertType {
   TEMPERATURE_HIGH = 'TEMPERATURE_HIGH',

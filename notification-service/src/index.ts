@@ -1,5 +1,3 @@
-// TODO 7: Notification Service with IIFE structure
-// Self-executing service for alert processing
 
 import dotenv from 'dotenv';
 import { DatabaseConnection } from './infrastructure/config/database';

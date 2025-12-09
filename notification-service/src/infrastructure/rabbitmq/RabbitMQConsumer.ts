@@ -1,11 +1,10 @@
-// TODO 5: Infrastructure Layer - RabbitMQ Consumer for Notification Service
 
-import amqp, { Channel, Connection } from 'amqplib';
+import amqp from 'amqplib';
 import { IMessageQueue, SensorDataMessage } from '../../domain/ports/IMessageQueue';
 
 export class RabbitMQConsumer implements IMessageQueue {
-  private connection: Connection | null = null;
-  private channel: Channel | null = null;
+  private connection: any = null;
+  private channel: any = null;
   private readonly url: string;
 
   constructor(url?: string) {
@@ -60,7 +59,7 @@ export class RabbitMQConsumer implements IMessageQueue {
     try {
       await this.channel.consume(
         queue,
-        async (msg) => {
+        async (msg: any) => {
           if (msg) {
             try {
               const messageContent = JSON.parse(msg.content.toString());

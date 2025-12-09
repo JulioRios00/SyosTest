@@ -1,7 +1,5 @@
-// TODO 4: Infrastructure Layer - Database adapters
-// TinyBone Sensor Repository implementation
 
-import TinyBone from 'tinybone';
+const TinyBone = require('../../../../../shared/tinybone/base');
 import { Pool } from 'pg';
 import { Sensor, SensorProps } from '../../domain/entities/Sensor';
 import { ISensorRepository } from '../../domain/ports/ISensorRepository';

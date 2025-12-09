@@ -1,7 +1,5 @@
-// TODO 4: Infrastructure Layer - Database adapters
-// TinyBone Alert Repository implementation
 
-import TinyBone from 'tinybone';
+const TinyBone = require('../../../../../shared/tinybone/base');
 import { Pool } from 'pg';
 import { Alert, AlertProps, AlertType, AlertSeverity } from '../../domain/entities/Alert';
 import { IAlertRepository } from '../../domain/ports/IAlertRepository';

@@ -1,6 +1,3 @@
-// TODO 3: Application Layer - Use Case for Notification Service
-// Process Alert Use Case
-
 import { Alert, AlertType, AlertSeverity } from '../../domain/entities/Alert';
 import { ISensorRepository } from '../../domain/ports/ISensorRepository';
 import { IAlertRepository } from '../../domain/ports/IAlertRepository';

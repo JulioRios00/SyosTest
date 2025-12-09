@@ -1,5 +1,4 @@
-// TODO 2: Domain Layer - Ports (Interfaces)
-// Repository Port for Alert persistence
+
 
 import { Alert } from '../entities/Alert';
 

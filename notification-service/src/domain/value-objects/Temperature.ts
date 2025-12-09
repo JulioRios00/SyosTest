@@ -1,5 +1,3 @@
-// TODO 2: Domain Layer - Value Objects
-// Temperature Value Object with validation
 
 export class Temperature {
   private readonly value: number;
