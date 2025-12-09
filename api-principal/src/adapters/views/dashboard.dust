@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sensor Monitoring Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        
+        .stat-value {
+            color: #333;
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+        
+        .section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        .sensors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .sensor-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .sensor-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.2);
+        }
+        
+        .sensor-card.active {
+            border-color: #4caf50;
+        }
+        
+        .sensor-card.inactive {
+            border-color: #f44336;
+            opacity: 0.7;
+        }
+        
+        .sensor-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .sensor-location {
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .sensor-status {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+        
+        .status-active {
+            background: #4caf50;
+            color: white;
+        }
+        
+        .status-inactive {
+            background: #f44336;
+            color: white;
+        }
+        
+        .alerts-list {
+            list-style: none;
+        }
+        
+        .alert-item {
+            background: #f5f5f5;
+            padding: 15px;
+            border-left: 4px solid #ff9800;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+        
+        .alert-item.critical {
+            border-left-color: #f44336;
+            background: #ffebee;
+        }
+        
+        .alert-item.warning {
+            border-left-color: #ff9800;
+            background: #fff3e0;
+        }
+        
+        .alert-message {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .alert-details {
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .alert-time {
+            font-size: 0.85em;
+            color: #999;
+            margin-top: 8px;
+        }
+        
+        .no-data {
+            text-align: center;
+            color: #999;
+            padding: 40px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌡️ Sensor Monitoring Dashboard</h1>
+            <p class="subtitle">Real-time Temperature & Humidity Monitoring System</p>
+        </header>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Sensors</div>
+                <div class="stat-value">{statistics.totalSensors}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Active Sensors</div>
+                <div class="stat-value">{statistics.activeSensors}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Recent Alerts</div>
+                <div class="stat-value">{statistics.totalAlerts}</div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>📊 Sensors</h2>
+            {?sensors}
+                <div class="sensors-grid">
+                    {#sensors}
+                        <div class="sensor-card {?isActive}active{:else}inactive{/isActive}">
+                            <div class="sensor-name">{name}</div>
+                            <div class="sensor-location">📍 {location}</div>
+                            <span class="sensor-status {?isActive}status-active{:else}status-inactive{/isActive}">
+                                {?isActive}Active{:else}Inactive{/isActive}
+                            </span>
+                        </div>
+                    {/sensors}
+                </div>
+            {:else}
+                <div class="no-data">No sensors registered yet</div>
+            {/sensors}
+        </div>
+        
+        <div class="section">
+            <h2>🚨 Recent Alerts</h2>
+            {?recentAlerts}
+                <ul class="alerts-list">
+                    {#recentAlerts}
+                        <li class="alert-item {severity}">
+                            <div class="alert-message">{message}</div>
+                            <div class="alert-details">
+                                Temperature: {temperature}°C | Humidity: {humidity}%
+                            </div>
+                            <div class="alert-time">Sensor ID: {sensorId} | {createdAt}</div>
+                        </li>
+                    {/recentAlerts}
+                </ul>
+            {:else}
+                <div class="no-data">No alerts to display</div>
+            {/recentAlerts}
+        </div>
+    </div>
+    
+    <script>
+        // Auto-refresh every 30 seconds
+        setTimeout(() => {
+            window.location.reload();
+        }, 30000);
+    </script>
+</body>
+</html>

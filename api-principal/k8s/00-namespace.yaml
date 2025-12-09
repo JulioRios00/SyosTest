@@ -1,0 +1,7 @@
+# TODO 10: Kubernetes - Namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: syos-monitoring
+  labels:
+    name: syos-monitoring
