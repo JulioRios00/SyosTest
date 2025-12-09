@@ -407,46 +407,7 @@ docker-compose logs notification-service | grep ALERT
 9. **Structured Logging**: Winston for observability
 10. **Type Safety**: TypeScript for robust development
 
-## 📄 License
 
-This project is developed as a technical test for SYOS.
-
-## 👤 Author
-
-Developed using AI assistance (GitHub Copilot with Claude Sonnet 4.5)
-
----
-
-**Note**: This is a technical test demonstrating microservices architecture, hexagonal architecture, and DevOps practices with Docker and Kubernetes.
-## Project Structure
-
-```
-├── start.sh / stop.sh           # Quick start/stop scripts
-├── docker-compose.yml           # Multi-container setup
-│
-├── api-principal/               # Main API service
-│   ├── src/
-│   │   ├── domain/             # Entities, value objects
-│   │   ├── application/        # Use cases
-│   │   ├── infrastructure/     # Database, config
-│   │   └── adapters/           # HTTP controllers
-│   ├── public/                 # Frontend assets
-│   └── tests/                  # 100+ tests
-│
-├── sensor-service/             # Data collection (IIFE)
-├── notification-service/       # Alert processing (IIFE)
-│
-├── k8s/                        # Kubernetes manifests
-└── shared/tinybone/            # Client-side framework
-```## Troubleshooting
-
-**Dashboard not loading?**
-```bash
-# Check API logs
-tail -f /tmp/syos-api.log
-
-# Verify database
-docker exec syos-postgres psql -U postgres -d syos -c "\dt"
 ```
 
 **Containers not starting?**
@@ -473,10 +434,6 @@ lsof -i :3000
 - Kubernetes orchestration
 - TypeScript with strict typing
 - Comprehensive test coverage
-
-## License
-
-Technical test project for SYOS.
 
 ---
 
