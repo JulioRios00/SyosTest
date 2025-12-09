@@ -1,6 +1,3 @@
-// TODO 7: Notification Service with IIFE structure
-// Self-executing service for alert processing
-
 import dotenv from 'dotenv';
 import { DatabaseConnection } from './infrastructure/config/database';
 import { TinyboneSensorRepository } from './infrastructure/database/TinyboneSensorRepository';
@@ -11,7 +8,6 @@ import { ProcessAlertUseCase } from './application/use-cases/ProcessAlertUseCase
 
 dotenv.config();
 
-// IIFE (Immediately Invoked Function Expression) Pattern
 (async function NotificationService() {
   const logger = new WinstonLogger('notification-service');
   let messageQueue: RabbitMQConsumer | null = null;
@@ -20,16 +16,13 @@ dotenv.config();
     try {
       logger.info('Starting Notification Service...');
 
-      // Initialize database connection
       await DatabaseConnection.initialize();
       logger.info('Database connected');
 
-      // Initialize RabbitMQ Consumer
       messageQueue = new RabbitMQConsumer();
       await messageQueue.connect();
       logger.info('RabbitMQ connected');
 
-      // Setup dependency injection
       const sensorRepository = new TinyboneSensorRepository();
       const alertRepository = new TinyboneAlertRepository();
       const processAlertUseCase = new ProcessAlertUseCase(
@@ -38,7 +31,6 @@ dotenv.config();
         logger
       );
 
-      // Start consuming messages
       await messageQueue.consume('sensor-data', async (message) => {
         await processAlertUseCase.execute(message);
       });

@@ -1,5 +1,3 @@
-// TODO 8: Adapters Layer - Error handling middleware
-// Express error handling
 
 import { Request, Response, NextFunction } from 'express';
 import { ILogger } from '../../domain/ports/ILogger';

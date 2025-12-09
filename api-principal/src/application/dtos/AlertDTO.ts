@@ -1,5 +1,3 @@
-// TODO 3: Application Layer - DTOs
-// Data Transfer Objects for Alert operations
 
 import { AlertType, AlertSeverity } from '../../domain/entities/Alert';
 

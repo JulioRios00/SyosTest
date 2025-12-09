@@ -1,6 +1,3 @@
-// TODO 5: Infrastructure Layer - RabbitMQ adapter for Sensor Service
-// RabbitMQ Producer implementation
-
 import amqp, { Channel, Connection } from 'amqplib';
 import { IMessageQueue, SensorDataMessage } from '../../domain/ports/IMessageQueue';
 
@@ -18,7 +15,6 @@ export class RabbitMQProducer implements IMessageQueue {
       this.connection = await amqp.connect(this.url);
       this.channel = await this.connection.createChannel();
 
-      // Declare the queue
       await this.channel.assertQueue('sensor-data', {
         durable: true,
       });

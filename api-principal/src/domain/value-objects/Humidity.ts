@@ -1,5 +1,4 @@
-// TODO 2: Domain Layer - Value Objects
-// Humidity Value Object with validation
+
 
 export class Humidity {
   private readonly value: number;

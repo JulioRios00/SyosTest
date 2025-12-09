@@ -1,6 +1,3 @@
-// TODO 3: Application Layer - Use Cases
-// RegisterSensor Use Case
-
 import { Sensor } from '../../domain/entities/Sensor';
 import { ISensorRepository } from '../../domain/ports/ISensorRepository';
 import { ILogger } from '../../domain/ports/ILogger';

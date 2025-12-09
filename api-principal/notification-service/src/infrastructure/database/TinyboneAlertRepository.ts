@@ -1,5 +1,3 @@
-// TODO 4: Infrastructure Layer - Database adapters
-// TinyBone Alert Repository implementation
 
 import TinyBone from 'tinybone';
 import { Pool } from 'pg';
@@ -13,7 +11,6 @@ export class TinyboneAlertRepository implements IAlertRepository {
   constructor() {
     const pool = DatabaseConnection.getInstance();
     
-    // Initialize TinyBone model for alerts
     this.model = new TinyBone(pool, {
       table: 'alerts',
       key: 'id',

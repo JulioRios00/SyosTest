@@ -1,5 +1,3 @@
-// TODO 2: Domain Layer - Value Objects
-// SensorLimits Value Object
 
 export interface SensorLimitsProps {
   minTemperature: number;

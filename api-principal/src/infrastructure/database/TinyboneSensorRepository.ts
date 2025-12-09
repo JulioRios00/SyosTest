@@ -61,7 +61,14 @@ export class TinyboneSensorRepository implements ISensorRepository {
     return result.rows.map((row: any) => this.mapToDomain(row));
   }
 
-  async update(sensor: Sensor): Promise<Sensor> {
+  async findByActive(isActive: boolean): Promise<Sensor[]> {
+    const query = 'SELECT * FROM sensors WHERE is_active = $1 ORDER BY created_at DESC';
+    const result = await this.pool.query(query, [isActive]);
+    
+    return result.rows.map((row: any) => this.mapToDomain(row));
+  }
+
+  async update(id: string, sensor: Sensor): Promise<Sensor> {
     const sensorData = sensor.toJSON();
     
     const query = `

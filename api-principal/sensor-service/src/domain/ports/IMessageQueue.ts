@@ -1,6 +1,3 @@
-// TODO 2: Domain Layer - Ports (Interfaces)
-// Message Queue Port for publishing sensor data
-
 export interface SensorDataMessage {
   sensorId: string;
   temperature: number;

@@ -1,5 +1,3 @@
-// TODO 4: Infrastructure Layer - Database configuration
-// PostgreSQL connection setup
 
 import { Pool } from 'pg';
 
@@ -31,7 +29,6 @@ export class DatabaseConnection {
   static async initialize(): Promise<void> {
     const pool = DatabaseConnection.getInstance();
     
-    // Test connection
     try {
       const client = await pool.connect();
       await client.query('SELECT NOW()');
@@ -40,8 +37,6 @@ export class DatabaseConnection {
       console.error('Failed to connect to database:', error);
       throw error;
     }
-
-    // Create tables if they don't exist
     await DatabaseConnection.createTables();
   }
 

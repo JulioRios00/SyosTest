@@ -1,5 +1,3 @@
-// TODO 4: Infrastructure Layer - Database adapters
-// TinyBone Sensor Repository for Sensor Service (read-only)
 
 import TinyBone from 'tinybone';
 import { Sensor, SensorProps } from '../../domain/entities/Sensor';
@@ -12,7 +10,6 @@ export class TinyboneSensorRepository implements ISensorRepository {
   constructor() {
     const pool = DatabaseConnection.getInstance();
     
-    // Initialize TinyBone model for sensors
     this.model = new TinyBone(pool, {
       table: 'sensors',
       key: 'id',

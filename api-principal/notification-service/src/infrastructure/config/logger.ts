@@ -1,5 +1,3 @@
-// TODO 8: Infrastructure Layer - Logger implementation
-// Winston logger implementation
 
 import winston from 'winston';
 import { ILogger } from '../../domain/ports/ILogger';

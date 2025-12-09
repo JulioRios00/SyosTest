@@ -1,5 +1,4 @@
-// TODO 7: Sensor Service with IIFE structure
-// Self-executing service for sensor data collection
+
 
 import dotenv from 'dotenv';
 import { DatabaseConnection } from './infrastructure/config/database';

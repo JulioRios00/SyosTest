@@ -1,5 +1,4 @@
-// TODO 2: Domain Layer - Entities
-// Sensor Entity with business logic
+
 
 import { SensorLimits, SensorLimitsProps } from '../value-objects/SensorLimits';
 

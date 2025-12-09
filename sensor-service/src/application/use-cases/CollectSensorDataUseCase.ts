@@ -1,5 +1,4 @@
-// TODO 3: Application Layer - Use Case for Sensor Service
-// Collect Sensor Data Use Case
+
 
 import { ISensorRepository } from '../../domain/ports/ISensorRepository';
 import { IMessageQueue, SensorDataMessage } from '../../domain/ports/IMessageQueue';

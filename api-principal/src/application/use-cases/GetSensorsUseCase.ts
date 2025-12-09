@@ -1,5 +1,3 @@
-// TODO 3: Application Layer - Use Cases
-// GetSensors Use Case
 
 import { ISensorRepository } from '../../domain/ports/ISensorRepository';
 import { ILogger } from '../../domain/ports/ILogger';

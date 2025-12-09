@@ -1,6 +1,3 @@
-// TODO 4: Infrastructure Layer - Database configuration
-// PostgreSQL connection setup
-
 import { Pool } from 'pg';
 
 export class DatabaseConnection {

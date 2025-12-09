@@ -1,4 +1,3 @@
-// RequireJS configuration and application bootstrap
 requirejs.config({
     baseUrl: '/js',
     urlArgs: 'bust=' + (new Date()).getTime(),

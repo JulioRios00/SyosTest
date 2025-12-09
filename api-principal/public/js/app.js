@@ -1,4 +1,3 @@
-// Client-side application entry point using TinyBone
 define([
     'tinybone/base',
     './views/DashboardView',

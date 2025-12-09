@@ -1,5 +1,3 @@
-// TODO 6: Adapters Layer - HTTP Controllers
-// Sensor Controller
 
 import { Request, Response, NextFunction } from 'express';
 import { RegisterSensorUseCase } from '../../application/use-cases/RegisterSensorUseCase';

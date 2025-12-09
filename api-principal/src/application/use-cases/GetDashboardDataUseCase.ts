@@ -1,5 +1,3 @@
-// TODO 3: Application Layer - Use Cases
-// GetDashboardData Use Case
 
 import { ISensorRepository } from '../../domain/ports/ISensorRepository';
 import { IAlertRepository } from '../../domain/ports/IAlertRepository';

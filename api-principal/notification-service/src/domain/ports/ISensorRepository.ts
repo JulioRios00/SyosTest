@@ -1,6 +1,3 @@
-// TODO 2: Domain Layer - Ports (Interfaces)
-// Repository Port for Sensor persistence
-
 import { Sensor } from '../entities/Sensor';
 
 export interface ISensorRepository {

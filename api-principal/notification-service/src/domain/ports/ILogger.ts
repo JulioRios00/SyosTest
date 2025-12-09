@@ -1,6 +1,3 @@
-// TODO 2: Domain Layer - Ports (Interfaces)
-// Logger Port for structured logging
-
 export enum LogLevel {
   INFO = 'info',
   WARN = 'warn',

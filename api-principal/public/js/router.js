@@ -1,4 +1,3 @@
-// Client-side router using TinyBone
 define([
     'tinybone/base',
     './views/DashboardView'
@@ -19,7 +18,6 @@ define([
                 self.renderDashboard(req, res);
             });
 
-            // Default route
             this.get('/', function(req, res) {
                 self.renderDashboard(req, res);
             });

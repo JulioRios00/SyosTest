@@ -1,5 +1,3 @@
-// TODO 6: Adapters Layer - HTTP Routes
-// Express routes configuration
 
 import { Router } from 'express';
 import { SensorController } from './SensorController';

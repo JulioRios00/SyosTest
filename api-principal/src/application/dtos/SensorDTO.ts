@@ -1,5 +1,3 @@
-// TODO 3: Application Layer - DTOs
-// Data Transfer Objects for Sensor operations
 
 export interface RegisterSensorDTO {
   name: string;

@@ -1,5 +1,3 @@
-// TODO 7: Main application file for API Principal
-// Dependency injection and server setup
 
 import express, { Express } from 'express';
 import cors from 'cors';

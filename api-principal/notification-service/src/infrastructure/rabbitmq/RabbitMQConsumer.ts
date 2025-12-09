@@ -1,5 +1,3 @@
-// TODO 5: Infrastructure Layer - RabbitMQ Consumer for Notification Service
-
 import amqp, { Channel, Connection } from 'amqplib';
 import { IMessageQueue, SensorDataMessage } from '../../domain/ports/IMessageQueue';
 
@@ -17,12 +15,10 @@ export class RabbitMQConsumer implements IMessageQueue {
       this.connection = await amqp.connect(this.url);
       this.channel = await this.connection.createChannel();
 
-      // Declare the queue
       await this.channel.assertQueue('sensor-data', {
         durable: true,
       });
 
-      // Set prefetch to 1 to ensure fair distribution
       this.channel.prefetch(1);
 
     } catch (error) {
@@ -68,7 +64,6 @@ export class RabbitMQConsumer implements IMessageQueue {
               this.channel!.ack(msg);
             } catch (error) {
               console.error('Error processing message:', error);
-              // Reject and requeue the message after 3 attempts
               this.channel!.nack(msg, false, true);
             }
           }
